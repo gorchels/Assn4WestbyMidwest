@@ -1,0 +1,24 @@
+---
+title: "Assignment4"
+author: "Madeline Gorchels"
+date: "11/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Loading packages and data sets
+
+library(tidyverse)
+library(effsize)
+library(knitr)
+library(kableExtra)
+
+lob_ab = read_csv("lobster_size_abundance.csv")
+lob_trap = read_csv("lobster_traps.csv")
+
+```
+
