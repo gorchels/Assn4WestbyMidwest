@@ -9,16 +9,31 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
-#Loading packages and data sets
+```{r, echo=FALSE, message=FALSE}
+#Loading packages and data sets (see note below)
 
 library(tidyverse)
 library(effsize)
 library(knitr)
 library(kableExtra)
+library(vcdExtra) # Based on instructions it looks like this may be necissary -you'll need to instal this if you haven't already
 
 lob_ab = read_csv("lobster_size_abundance.csv")
 lob_trap = read_csv("lobster_traps.csv")
 
 ```
+
+# "Compare mean lobster size by site in 2017"
+
+Note: We will need to get lob_ab into tidyformet (still working on it), meanwhile the code can be set up in preperation
+
+```{r}
+lob_size_2017 <- select(lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant categories. Note, depending on how the we make the file tidy, the first term may need to change 
+  filter(YEAR == "2017") %>% 
+  group_by(SITE)
+```
+
+
+
+
 
