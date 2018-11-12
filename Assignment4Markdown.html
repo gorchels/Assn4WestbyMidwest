@@ -129,13 +129,17 @@ $(document).ready(function () {
 </div>
 
 
+<div id="lobster-abundance-and-fishing-pressure-2012---2017" class="section level1">
+<h1>“Lobster abundance and fishing pressure (2012 - 2017)”</h1>
+<p>Note: We will need to get lob_ab into tidyformet (still working on it), meanwhile the code can be set up in preperation</p>
+<pre class="r"><code>tidy_lob_ab &lt;- filter(lob_ab, SIZE &gt; &quot;-99999&quot;)   # Get rid of those negitive values
+  #expand.dft(lob_ab, var.names = &quot;YEAR&quot;:&quot;SIZE&quot;, freq = &quot;COUNT&quot;)</code></pre>
+</div>
 <div id="compare-mean-lobster-size-by-site-in-2017" class="section level1">
 <h1>“Compare mean lobster size by site in 2017”</h1>
-<p>Note: We will need to get lob_ab into tidyformet (still working on it), meanwhile the code can be set up in preperation</p>
 <pre class="r"><code>lob_size_2017 &lt;- select(lob_ab, YEAR, SITE, SIZE) %&gt;%  # Select relevant categories. Note, depending on how the we make the file tidy, the first term may need to change 
   filter(YEAR == &quot;2017&quot;) %&gt;% 
   group_by(SITE)</code></pre>
-<p>test</p>
 </div>
 
 

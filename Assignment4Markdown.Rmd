@@ -23,9 +23,17 @@ lob_trap = read_csv("lobster_traps.csv")
 
 ```
 
-# "Compare mean lobster size by site in 2017"
+# "Lobster abundance and fishing pressure (2012 - 2017)"
 
 Note: We will need to get lob_ab into tidyformet (still working on it), meanwhile the code can be set up in preperation
+
+```{r}
+tidy_lob_ab <- filter(lob_ab, SIZE > "-99999")   # Get rid of those negitive values
+  #expand.dft(lob_ab, var.names = "YEAR":"SIZE", freq = "COUNT")
+```
+
+
+# "Compare mean lobster size by site in 2017"
 
 ```{r}
 lob_size_2017 <- select(lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant categories. Note, depending on how the we make the file tidy, the first term may need to change 
@@ -33,7 +41,7 @@ lob_size_2017 <- select(lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant categor
   group_by(SITE)
 ```
 
-test
+
 
 
 
