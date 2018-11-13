@@ -30,7 +30,6 @@ Note: We will need to get lob_ab into tidyformet (still working on it), meanwhil
 ```{r}
 tidy_lob_ab <- expand.dft(data.frame(lob_ab), freq = "COUNT") # Data in tidy format
   
-
 ```
 
 
