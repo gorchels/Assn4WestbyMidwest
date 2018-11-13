@@ -28,8 +28,9 @@ lob_trap = read_csv("lobster_traps.csv")
 Note: We will need to get lob_ab into tidyformet (still working on it), meanwhile the code can be set up in preperation
 
 ```{r}
-tidy_lob_ab <- filter(lob_ab, SIZE > "-99999")   # Get rid of those negitive values
-  #expand.dft(lob_ab, var.names = "YEAR":"SIZE", freq = "COUNT")
+tidy_lob_ab <- expand.dft(data.frame(lob_ab), freq = "COUNT") # Data in tidy format
+  
+
 ```
 
 
