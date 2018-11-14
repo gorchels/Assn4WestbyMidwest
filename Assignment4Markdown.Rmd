@@ -25,18 +25,45 @@ lob_trap = read_csv("lobster_traps.csv")
 
 # "Lobster abundance and fishing pressure (2012 - 2017)"
 
-Note: We will need to get lob_ab into tidyformet (still working on it), meanwhile the code can be set up in preperation
+Describe trends in lobster abundance (counts) and fishing pressure (trap buoys) at the five locations from
+2012 - 2017. Ignore transect information - we are only interested in evaluating abundance and pressure on the
+order of SITE. Note: you are not expected to use regression here - just think of ways to clearly
+describe annual totals visually and in text, noting important trends, events and differences.
+
 
 ```{r}
+
 tidy_lob_ab <- expand.dft(data.frame(lob_ab), freq = "COUNT") # Data in tidy format
-  
+
+lob_ab_hist <- ggplot(tidy_lob_ab, aes(SIZE)) +
+  geom_histogram(aes(fill = SITE)) +
+  facet_wrap(~SITE)
+
+lob_ab_hist
+
+lob_ab_hist_stack <- ggplot(tidy_lob_ab, aes(SIZE)) +
+  geom_histogram(aes(fill = SITE)) 
+
+lob_ab_hist_stack
 ```
+
+```{r}
+lob_trap_filtered <- filter(lob_trap, SITE == c("AQUE","CARP","IVEE","MOHK","NAPL"))  # I get a warning message so I need to confirm this is ok
+
+lob_trap_hist <- ggplot(lob_trap_filtered, aes(TRAPS)) +
+  geom_histogram(aes(fill = SITE)) +
+  facet_wrap(~SITE)
+
+lob_trap_hist
+
+```
+
 
 
 # "Compare mean lobster size by site in 2017"
 
 ```{r}
-lob_size_2017 <- select(lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant categories. Note, depending on how the we make the file tidy, the first term may need to change 
+lob_size_2017 <- select(tidy_lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant categories. Note, depending on how the we make the file tidy, the first term may need to change 
   filter(YEAR == "2017") %>% 
   group_by(SITE)
 ```
