@@ -48,6 +48,84 @@ lob_ab_hist_stack
 ```
 
 ```{r}
+
+lob_ab_year <- group_by(tidy_lob_ab, "YEAR") 
+
+# Plotting changes in time for AQUE
+aque_ab_summary <- filter(lob_ab_year, SITE == "AQUE") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_size_aque = round(mean(SIZE), 2))
+
+aque_lob_ab_hist <- ggplot(data = aque_ab_summary, 
+                           aes(x = YEAR,
+                               y = mean_size_aque)) +
+  geom_col()
+
+aque_lob_ab_hist
+
+
+# Plotting changes in time for CARP
+CARP_ab_summary <- filter(lob_ab_year, SITE == "CARP") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_size_CARP = round(mean(SIZE), 2))
+
+CARP_lob_ab_hist <- ggplot(data = CARP_ab_summary, 
+                           aes(x = YEAR,
+                               y = mean_size_CARP)) +
+  geom_col()
+
+CARP_lob_ab_hist
+
+
+# Plotting changes in time for IVEE
+IVEE_ab_summary <- filter(lob_ab_year, SITE == "IVEE") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_size_IVEE = round(mean(SIZE), 2))
+
+IVEE_lob_ab_hist <- ggplot(data = IVEE_ab_summary, 
+                           aes(x = YEAR,
+                               y = mean_size_IVEE)) +
+  geom_col()
+
+IVEE_lob_ab_hist
+
+
+# Plotting changes in time for MOHK
+MOHK_ab_summary <- filter(lob_ab_year, SITE == "MOHK") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_size_MOHK = round(mean(SIZE), 2))
+
+MOHK_lob_ab_hist <- ggplot(data = MOHK_ab_summary, 
+                           aes(x = YEAR,
+                               y = mean_size_MOHK)) +
+  geom_col()
+
+MOHK_lob_ab_hist
+
+
+
+# Plotting changes in time for NAPL
+NAPL_ab_summary <- filter(lob_ab_year, SITE == "NAPL") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_size_NAPL = round(mean(SIZE), 2))
+
+NAPL_lob_ab_hist <- ggplot(data = NAPL_ab_summary, 
+                           aes(x = YEAR,
+                               y = mean_size_NAPL)) +
+  geom_col()
+
+NAPL_lob_ab_hist
+```
+
+
+
+
+```{r}
 lob_trap_filtered <- filter(lob_trap, SITE == c("AQUE","CARP","IVEE","MOHK","NAPL"))  # I get a warning message so I need to confirm this is ok
 
 lob_trap_hist <- ggplot(lob_trap_filtered, aes(TRAPS)) +
