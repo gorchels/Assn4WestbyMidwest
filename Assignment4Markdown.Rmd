@@ -36,6 +36,8 @@ describe annual totals visually and in text, noting important trends, events and
 
 tidy_lob_ab <- expand.dft(data.frame(lob_ab), freq = "COUNT") # Data in tidy format
 
+# Histomgrams looking at size at each site
+
 lob_ab_hist <- ggplot(tidy_lob_ab, aes(SIZE)) +
   geom_histogram(aes(fill = SITE)) +
   facet_wrap(~SITE)
@@ -49,6 +51,8 @@ lob_ab_hist_stack
 ```
 
 ```{r}
+
+# These graphs are plotting size of lobsters at each site based on year
 
 lob_ab_year <- group_by(tidy_lob_ab, "YEAR") 
 
@@ -127,8 +131,11 @@ NAPL_lob_ab_hist
 
 
 ```{r}
+# Trap data has other sites, this code is to look at only the sites in the other table
+
 lob_trap_filtered <- filter(lob_trap, SITE == c("AQUE","CARP","IVEE","MOHK","NAPL"))  # I get a warning message so I need to confirm this is ok
 
+# Hist looks at the number of traps per transect at each site
 lob_trap_hist <- ggplot(lob_trap_filtered, aes(TRAPS)) +
   geom_histogram(aes(fill = SITE)) +
   facet_wrap(~SITE, scales = "free")
