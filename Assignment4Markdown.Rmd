@@ -18,6 +18,7 @@ library(knitr)
 library(kableExtra)
 library(vcdExtra) # Based on instructions it looks like this may be necissary -you'll need to instal this if you haven't already
 library(car)
+library(RColorBrewer)
 
 lob_ab = read_csv("lobster_size_abundance.csv")
 lob_trap = read_csv("lobster_traps.csv")
@@ -293,6 +294,31 @@ NAPL_lob_trap_total_hist <- ggplot(data = NAPL_trap_total,
 NAPL_lob_trap_total_hist
 ```
 
+```{r}
+# Trying to create a plot using data from both datasets
+
+traps_merge <- group_by(lob_trap_year, YEAR, SITE) %>% 
+  summarize(
+    total_traps = sum(TRAPS)
+  )
+  
+ab_merge  <- group_by(lob_ab_year, YEAR, SITE) %>% 
+   summarize(
+    total_lob = length(SIZE)
+  )
+
+ab_traps_merge <- merge(traps_merge,ab_merge, by=c("YEAR","SITE")) 
+
+
+count_vs_traps <- ggplot(data = ab_traps_merge, 
+                           aes(x = total_traps,
+                               y = total_lob)) +
+  geom_point(aes(colour = SITE)) +
+  facet_wrap(~YEAR)
+
+count_vs_traps
+
+```
 
 
 
