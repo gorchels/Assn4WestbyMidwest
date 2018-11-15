@@ -17,6 +17,7 @@ library(effsize)
 library(knitr)
 library(kableExtra)
 library(vcdExtra) # Based on instructions it looks like this may be necissary -you'll need to instal this if you haven't already
+library(car)
 
 lob_ab = read_csv("lobster_size_abundance.csv")
 lob_trap = read_csv("lobster_traps.csv")
@@ -307,7 +308,17 @@ lob_2017_qq <- ggplot(lob_size_2017, aes(sample = SIZE)) +
   facet_wrap(~ SITE)
 lob_2017_qq
 
-#data normally distributed on to ANOVA
+#data normally distributed 
+
+lob_var <- leveneTest(SIZE ~ SITE, data = lob_size_2017)
+lob_var
+#variances not equal
+
+var <- lob_size_2017 %>% 
+  group_by(SITE) %>% 
+  summarize(variance = var(SIZE))
+var
+#but largest variance is still within the standard amount, so on to ANOVA
 
 #H0: Mean lobster size accross site equal
 #HA: At least two mean differ significantly accross sites
@@ -323,7 +334,7 @@ lob_2017_ph
 #2017 sites signficantly different from one anothe NAPL to CARP, NAPL to IVEE, and NAPL to MOHK
 ```
 
-
+# Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
 
 
 
