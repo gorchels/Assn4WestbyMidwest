@@ -39,7 +39,7 @@ lob_ab_hist <- ggplot(tidy_lob_ab, aes(SIZE)) +
   geom_histogram(aes(fill = SITE)) +
   facet_wrap(~SITE)
 
-lob_ab_hist
+lob_ab_hist #data normally distributed can do ANOVA
 
 lob_ab_hist_stack <- ggplot(tidy_lob_ab, aes(SIZE)) +
   geom_histogram(aes(fill = SITE)) 
@@ -294,9 +294,36 @@ NAPL_lob_trap_total_hist
 lob_size_2017 <- select(tidy_lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant categories. Note, depending on how the we make the file tidy, the first term may need to change 
   filter(YEAR == "2017") %>% 
   group_by(SITE)
+
+#Exploritory graphs to test normality of data
+lob_2017_hist <- ggplot(lob_size_2017, aes(x = SIZE)) +
+  geom_histogram(aes(fill = SITE)) +
+  facet_wrap(~ SITE)
+
+lob_2017_hist
+
+lob_2017_qq <- ggplot(lob_size_2017, aes(sample = SIZE)) +
+  geom_qq() +
+  facet_wrap(~ SITE)
+lob_2017_qq
+
+#data normally distributed on to ANOVA
+
+#H0: Mean lobster size accross site equal
+#HA: At least two mean differ significantly accross sites
+
+lob_2017_aov <- aov(SIZE ~ SITE, data = lob_size_2017)
+summary(lob_2017_aov)
+#reject null at least two sites significantly different lobster sizes
+
+# Post-hoc testing with Tukey's HSD
+lob_2017_ph <- TukeyHSD(lob_2017_aov)
+lob_2017_ph
+
+#2017 sites signficantly different from one anothe NAPL to CARP, NAPL to IVEE, and NAPL to MOHK
 ```
 
-Test to see if the pushing works for me (Becky)
+
 
 
 
