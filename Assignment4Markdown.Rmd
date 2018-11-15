@@ -137,6 +137,87 @@ lob_trap_hist
 ```
 
 
+```{r}
+lob_trap_year <- group_by(lob_trap_filtered, "YEAR") 
+
+# Plotting changes in time for AQUE
+aque_trap_summary <- filter(lob_trap_year, SITE == "AQUE") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_trap_aque = round(mean(TRAPS), 2))
+
+aque_lob_trap_hist <- ggplot(data = aque_trap_summary, 
+                           aes(x = YEAR,
+                               y = mean_trap_aque)) +
+  geom_col()
+
+aque_lob_trap_hist
+
+
+
+# Plotting changes in time for CARP
+CARP_trap_summary <- filter(lob_trap_year, SITE == "CARP") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_trap_CARP = round(mean(TRAPS), 2))
+
+CARP_lob_trap_hist <- ggplot(data = CARP_trap_summary, 
+                           aes(x = YEAR,
+                               y = mean_trap_CARP)) +
+  geom_col()
+
+CARP_lob_trap_hist
+
+
+
+# Plotting changes in time for IVEE
+IVEE_trap_summary <- filter(lob_trap_year, SITE == "IVEE") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_trap_IVEE = round(mean(TRAPS), 2))
+
+IVEE_lob_trap_hist <- ggplot(data = IVEE_trap_summary, 
+                           aes(x = YEAR,
+                               y = mean_trap_IVEE)) +
+  geom_col()
+
+IVEE_lob_trap_hist
+
+
+
+# Plotting changes in time for MOHK
+MOHK_trap_summary <- filter(lob_trap_year, SITE == "MOHK") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_trap_MOHK = round(mean(TRAPS), 2))
+
+MOHK_lob_trap_hist <- ggplot(data = MOHK_trap_summary, 
+                           aes(x = YEAR,
+                               y = mean_trap_MOHK)) +
+  geom_col()
+
+MOHK_lob_trap_hist
+
+
+
+
+# Plotting changes in time for NAPL
+NAPL_trap_summary <- filter(lob_trap_year, SITE == "NAPL") %>% 
+  group_by(YEAR) %>% 
+  summarize( 
+   mean_trap_NAPL = round(mean(TRAPS), 2))
+
+NAPL_lob_trap_hist <- ggplot(data = NAPL_trap_summary, 
+                           aes(x = YEAR,
+                               y = mean_trap_NAPL)) +
+  geom_col()
+
+NAPL_lob_trap_hist
+```
+
+
+
+
 
 # "Compare mean lobster size by site in 2017"
 
