@@ -130,7 +130,7 @@ lob_trap_filtered <- filter(lob_trap, SITE == c("AQUE","CARP","IVEE","MOHK","NAP
 
 lob_trap_hist <- ggplot(lob_trap_filtered, aes(TRAPS)) +
   geom_histogram(aes(fill = SITE)) +
-  facet_wrap(~SITE)
+  facet_wrap(~SITE, scales = "free")
 
 lob_trap_hist
 
@@ -138,6 +138,8 @@ lob_trap_hist
 
 
 ```{r}
+# These graphs look at the mean number of traps at sites over time
+
 lob_trap_year <- group_by(lob_trap_filtered, "YEAR") 
 
 # Plotting changes in time for AQUE
@@ -215,6 +217,73 @@ NAPL_lob_trap_hist <- ggplot(data = NAPL_trap_summary,
 NAPL_lob_trap_hist
 ```
 
+```{r}
+# These graphs look at total traps at each location over time
+
+# Plotting changes in time for AQUE
+aque_trap_total <- filter(lob_trap_year, SITE == "AQUE") %>% 
+  group_by(YEAR) 
+
+aque_lob_trap_total_hist <- ggplot(data = aque_trap_total, 
+                           aes(x = YEAR,
+                               y = TRAPS)) +
+  geom_col()
+
+aque_lob_trap_total_hist
+
+
+
+# Plotting changes in time for CARP
+CARP_trap_total <- filter(lob_trap_year, SITE == "CARP") %>% 
+  group_by(YEAR) 
+
+CARP_lob_trap_total_hist <- ggplot(data = CARP_trap_total, 
+                           aes(x = YEAR,
+                               y = TRAPS)) +
+  geom_col()
+
+CARP_lob_trap_total_hist
+
+
+
+# Plotting changes in time for IVEE
+IVEE_trap_total <- filter(lob_trap_year, SITE == "IVEE") %>% 
+  group_by(YEAR) 
+
+IVEE_lob_trap_total_hist <- ggplot(data = IVEE_trap_total, 
+                           aes(x = YEAR,
+                               y = TRAPS)) +
+  geom_col()
+
+IVEE_lob_trap_total_hist
+
+
+
+# Plotting changes in time for MOHK
+MOHK_trap_total <- filter(lob_trap_year, SITE == "MOHK") %>% 
+  group_by(YEAR) 
+
+MOHK_lob_trap_total_hist <- ggplot(data = MOHK_trap_total, 
+                           aes(x = YEAR,
+                               y = TRAPS)) +
+  geom_col()
+
+MOHK_lob_trap_total_hist
+
+
+
+
+# Plotting changes in time for NAPL
+NAPL_trap_total <- filter(lob_trap_year, SITE == "NAPL") %>% 
+  group_by(YEAR) 
+
+NAPL_lob_trap_total_hist <- ggplot(data = NAPL_trap_total, 
+                           aes(x = YEAR,
+                               y = TRAPS)) +
+  geom_col()
+
+NAPL_lob_trap_total_hist
+```
 
 
 
