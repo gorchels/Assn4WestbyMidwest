@@ -370,17 +370,13 @@ lob_2017_ph
 # Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
 
 
-4. Proportions of “legal” lobsters at the 5 sites in 2017
-The legal minimum carapace size for lobster is 82.6 mm. What proportion of observed lobsters at each site
-are above the legal minimum? Does that proportion differ significantly across the 5 sites? Note: We’ll be
-doing chi-square in labs next week, or go ahead with maximum resourcefulness and check out the chisq.test()
-function on your own!
+4. Doing a chi squared analysis on the size of lobsters based off site in 2017
 
 ```{r}
 #Making a table that is chi-squared friendly 
 
 legal_lob = tidy_lob_ab %>% 
-  filter(YEAR == 2016) %>% 
+  filter(YEAR == 2017) %>% 
   mutate(
     legal = case_when(
       SIZE > 82.6 ~ "Above Limit",
@@ -406,6 +402,43 @@ legal_x2
 #Hmmm, I'm thinking it will be more meaningful to group by protected and non protected sites. I'm going to test this with an additional dataframe. 
 
 
+```
+```{r}
+#I'm doing a chisquared test comparing protected and non protected sites. 
 
+legal_lob_prot = tidy_lob_ab %>% 
+  filter(YEAR == 2017) %>% 
+  mutate(
+    legal = case_when(
+      SIZE > 82.6 ~ "Above Limit",
+      SIZE <= 82.6 ~ "Below Limit")) %>%
+  mutate(
+    prot = case_when(
+      SITE == "NAPL" ~ "Protected",
+      SITE == "IVEE" ~ "Protected", 
+      SITE == "AQUE" ~ "Unprotected",
+      SITE == "MOHK" ~ "Unprotected",
+      SITE == "CARP" ~ "Unprotected"
+    )
+  ) %>% 
+  count(prot, legal) %>% 
+  spread(legal, n) %>% 
+  select(-prot)
+
+#View(legal_lob_prot)
+
+rownames(legal_lob_prot) =c("Protected", "Unprotected")
+
+#Making a gross propotion table for viewing pleasure 
+
+legal_prot_prop = prop.table(as.matrix(legal_lob_prot), 1)
+legal_prot_prop
+
+#Preforming a chi-square 
+
+legal_prot_x2 = chisq.test(legal_lob_prot)
+legal_prot_x2
+
+#P value is 0.97, so there is definitely not significant difference between protected and unprotected sites. This is pretty obvious from the quick and dirty propotion table I made. 
 ```
 
