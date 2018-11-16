@@ -344,14 +344,26 @@ merged_yearly_trap <- mutate(ab_traps_merge, trap_yearly = total_traps/3)
 trap_count_scatter <- ggplot(data = merged_yearly_trap, 
                            aes(x = trap_yearly,
                                y = total_lob)) +
-  geom_point(aes(colour = SITE)) +
-  facet_wrap(~YEAR)
+  geom_point(aes(colour = YEAR)) +
+  facet_wrap(~SITE)
 
 trap_count_scatter
 
 
 ```
 
+
+```{r}
+merge_bubble <- ggplot(merged_yearly_trap, aes(x = YEAR, y = total_lob)) +
+  geom_point(aes(color = SITE, size = trap_yearly),
+             alpha = 0.3) +
+  theme_classic() +
+  scale_color_manual(values = c("blue","green","red","orange","black")) + #name = "Smoker\nStatus") +
+  labs(x = "Year", y = "Total Lobsters") 
+  #scale_size_continuous(name = "Mother\nWeight Gain")
+
+merge_bubble
+```
 
 
 
