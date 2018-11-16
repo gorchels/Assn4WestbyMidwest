@@ -312,7 +312,7 @@ ab_merge  <- group_by(lob_ab_year, YEAR, SITE) %>%
     total_lob = length(SIZE)
   )
 
-ab_traps_merge <- merge(traps_merge,ab_merge, by=c("YEAR","SITE")) 
+ab_traps_merge <- merge(traps_merge,ab_merge, by=c("YEAR","SITE")) # Created the merged dataframe! 
 
 
 count_vs_traps <- ggplot(data = ab_traps_merge, 
@@ -324,6 +324,34 @@ count_vs_traps <- ggplot(data = ab_traps_merge,
 count_vs_traps
 
 ```
+
+```{r}
+# Realized that my reasoning above my not have been right -it added all traps -even in different months. Below I'm creating a monthly total to then average for the graph
+monthly_trap <- group_by(lob_trap_year, YEAR, SITE, MONTH) %>% 
+  summarize(
+    month_trap = sum(TRAPS)) 
+
+yearly_trap <- group_by(monthly_trap, YEAR, SITE) %>% 
+  summarize(
+    year_trap = mean(month_trap))
+
+monthly_ab <- group_by(lob_ab_year, YEAR, SITE, MONTH) %>% 
+  summarize(
+    month_ab = length(SIZE)) # I was thinking we had multiple months for the abundence data, but it looks like all abundence data was collected in one month -just in 2014 it was done a month later for some reason. So I think this part of the code is now moot 
+
+merged_yearly_trap <- mutate(ab_traps_merge, trap_yearly = total_traps/3)
+
+trap_count_scatter <- ggplot(data = merged_yearly_trap, 
+                           aes(x = trap_yearly,
+                               y = total_lob)) +
+  geom_point(aes(colour = SITE)) +
+  facet_wrap(~YEAR)
+
+trap_count_scatter
+
+
+```
+
 
 
 
