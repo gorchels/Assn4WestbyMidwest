@@ -35,7 +35,12 @@ describe annual totals visually and in text, noting important trends, events and
 
 ```{r}
 
-tidy_lob_ab <- expand.dft(data.frame(lob_ab), freq = "COUNT") # Data in tidy format
+tidy_lob_ab <- expand.dft(data.frame(lob_ab), freq = "COUNT") %>% 
+  mutate(
+    legal = case_when(
+      SIZE > 82.6 ~ "Above Limit",
+      SIZE <= 82.6 ~ "Below Limit"))
+# Data in tidy format, added a new column that describes whether they are Above or Below Legal limit
 
 # Histomgrams looking at size at each site
 
@@ -439,6 +444,17 @@ legal_prot_prop
 legal_prot_x2 = chisq.test(legal_lob_prot)
 legal_prot_x2
 
-#P value is 0.97, so there is definitely not significant difference between protected and unprotected sites. This is pretty obvious from the quick and dirty propotion table I made. 
+#P value is 0.97, so there is definitely not a significant difference between protected and unprotected sites. This is pretty obvious from the quick and dirty propotion table I made. 
+```
+
+Working on a finalized table. It's a work in progress
+```{r}
+#lob_prop_final = tidy_lob_ab %>% 
+  #group_by(SITE) %>% 
+  #summarize(
+    #limit = tally(legal == "Above Limit"), 
+  #"below legal" = tally(legal == "Below Limit"))
+
+#lob_prop_final
 ```
 
