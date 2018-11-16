@@ -376,7 +376,7 @@ are above the legal minimum? Does that proportion differ significantly across th
 doing chi-square in labs next week, or go ahead with maximum resourcefulness and check out the chisq.test()
 function on your own!
 
-```{r, include=FALSE}
+```{r}
 #Making a table that is chi-squared friendly 
 
 legal_lob = tidy_lob_ab %>% 
@@ -392,6 +392,19 @@ legal_lob = tidy_lob_ab %>%
 #View(legal_lob)
 
 rownames(legal_lob) =c("AQUE", "CARP", "IVEE", "MOHK", "NAPL")
+
+#Making a gross propotion table for viewing pleasure 
+
+legal_prop = prop.table(as.matrix(legal_lob), 1)
+legal_prop
+
+#Preforming a chi-square 
+
+legal_x2 = chisq.test(legal_lob)
+legal_x2
+
+#Hmmm, I'm thinking it will be more meaningful to group by protected and non protected sites. I'm going to test this with an additional dataframe. 
+
 
 
 ```
