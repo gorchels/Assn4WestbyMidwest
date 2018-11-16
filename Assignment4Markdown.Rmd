@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, comment = "")
 ```
 
 ```{r, echo=FALSE, message=FALSE}
@@ -370,4 +370,29 @@ lob_2017_ph
 # Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
 
 
+4. Proportions of “legal” lobsters at the 5 sites in 2017
+The legal minimum carapace size for lobster is 82.6 mm. What proportion of observed lobsters at each site
+are above the legal minimum? Does that proportion differ significantly across the 5 sites? Note: We’ll be
+doing chi-square in labs next week, or go ahead with maximum resourcefulness and check out the chisq.test()
+function on your own!
+
+```{r, include=FALSE}
+#Making a table that is chi-squared friendly 
+
+legal_lob = tidy_lob_ab %>% 
+  filter(YEAR == 2016) %>% 
+  mutate(
+    legal = case_when(
+      SIZE > 82.6 ~ "Above Limit",
+      SIZE <= 82.6 ~ "Below Limit")) %>% 
+  count(SITE, legal) %>% 
+  spread(legal, n) %>% 
+  select(-SITE)
+
+#View(legal_lob)
+
+rownames(legal_lob) =c("AQUE", "CARP", "IVEE", "MOHK", "NAPL")
+
+
+```
 
