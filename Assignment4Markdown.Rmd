@@ -376,7 +376,7 @@ lob_size_2017 <- select(tidy_lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant ca
 
 #Exploritory graphs to test normality of data
 lob_2017_hist <- ggplot(lob_size_2017, aes(x = SIZE)) +
-  geom_histogram(aes(fill = SITE)) +
+  geom_histogram(aes(fill = SITE), bins = 10) +
   facet_wrap(~ SITE)
 
 lob_2017_hist
@@ -409,7 +409,7 @@ summary(lob_2017_aov)
 lob_2017_ph <- TukeyHSD(lob_2017_aov)
 lob_2017_ph
 
-#2017 sites signficantly different from one anothe NAPL to CARP, NAPL to IVEE, and NAPL to MOHK
+#2017 sites signficantly different from one anothe NAPL to CARP and NAPL to IVEE
 
 #Creating basic graph
 lob_2017_summary <- lob_size_2017 %>% 
@@ -428,7 +428,19 @@ lob_2017_col <- ggplot(lob_2017_summary, aes(x = SITE, y = mean_size)) +
 lob_2017_col
 ```
 
-# Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
+```{r}
+#boxplot 2017 ANOVA data
+lob_2017_box <- ggplot(lob_size_2017, aes(x = SITE, y = SIZE)) +
+  geom_boxplot() +
+  theme_classic() +
+  ylab("Lobster Carapace Size (mm)") +
+  xlab("Site")
+
+lob_2017_box +
+  annotate('text',)
+```
+
+3. Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
 
 ```{r}
 #Creating data frame spliting up protected and unprotected with 2012 and 2017
@@ -480,8 +492,52 @@ lob_ttest_nonprot
 
 #Protected area size is significantly different between years, smaller in 2017
 
+#RIGHT TESTS: ttest per site
+
+lob_size_2012_2017 = tidy_lob_ab %>% 
+  filter(YEAR == "2012" | YEAR == "2017")
+
+#ttest IVEE between 2012 to 2017
+IVEE_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "IVEE") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+IVEE_ttest
+#significantly different between 2012 and 2017, larger in 2017
+
+#ttest NAPL between 2012 to 2017
+NAPL_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "NAPL") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+NAPL_ttest
+#not significantly different, 2017 still larger though
+
+#ttest AQUE between 2012 to 2017
+AQUE_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "AQUE") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+AQUE_ttest
+#not significantly different
+
+#ttest MOHK between 2012 to 2017
+MOHK_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "MOHK") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+MOHK_ttest
+#significantly different, 2012 larger
+
+#ttest CARP between 2012 to 2017
+CARP_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "CARP") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+CARP_ttest
+#not significantly different
+
 ```
 
+
+```{r}
+#table of t-test results
+```
 
 
 4. Doing a chi squared analysis on the size of lobsters based off site in 2017
