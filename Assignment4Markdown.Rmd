@@ -650,9 +650,10 @@ Working on a finalized table. It's a work in progress
 #lob_prop_final = tidy_lob_ab %>% 
   #group_by(SITE) %>% 
   #summarize(
-    #limit = tally(legal == "Above Limit"), 
+    #limit = n(SIZE)) 
   #"below legal" = tally(legal == "Below Limit"))
 
-#lob_prop_final
+lob_chi_tab = kable(legal_lob, "latex", booktabs = T)
+lob_chi_tab
 ```
 
