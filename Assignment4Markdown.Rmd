@@ -407,6 +407,7 @@ var
 
 lob_2017_aov <- aov(SIZE ~ SITE, data = lob_size_2017)
 summary(lob_2017_aov)
+
 #reject null at least two sites significantly different lobster sizes
 
 # Post-hoc testing with Tukey's HSD
