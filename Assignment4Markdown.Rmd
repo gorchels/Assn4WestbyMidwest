@@ -448,7 +448,7 @@ lob_2017_box <- ggplot(lob_size_2017, aes(x = SITE, y = SIZE)) +
 lob_2017_box 
 
 ```
-Lobster Carapace length (mm) differed significantly among the five (LTER) sites in the Santa Barbara Channel (F(`r {round(summary(lob_2017_aov)$parameter,3)}`) = )
+Lobster Carapace length (mm) differed significantly among the five (LTER) sites in the Santa Barbara Channel (F() = )
 
 3. Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
 
