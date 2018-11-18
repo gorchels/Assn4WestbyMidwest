@@ -2,7 +2,9 @@
 title: "Assignment4"
 author: "Madeline Gorchels"
 date: "11/10/2018"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -436,7 +438,7 @@ lob_2017_col
 lob_2017_box <- ggplot(lob_size_2017, aes(x = SITE, y = SIZE)) +
   geom_boxplot() +
   theme_classic() +
-  ylab("Lobster Carapace Size (mm)") +
+  ylab("Lobster Carapace length (mm)") +
   xlab("Site") +
   geom_signif(comparisons = list(c("CARP", "NAPL")), 
               map_signif_level=TRUE, y_position = c(167), annotation = c("p = 0.02")) +
@@ -446,6 +448,7 @@ lob_2017_box <- ggplot(lob_size_2017, aes(x = SITE, y = SIZE)) +
 lob_2017_box 
 
 ```
+Lobster Carapace length (mm) differed significantly among the five (LTER) sites in the Santa Barbara Channel (F() = )
 
 3. Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
 
