@@ -661,7 +661,7 @@ lob_prop_final = as.data.frame(legal_lob) %>%
   select(Site, Legal, Not_legal) %>% 
   kable(col.name = c("Site", "Above Limit", "Below Limit")) %>% 
   kable_styling()
-
+d
 lob_prop_final
 
 
