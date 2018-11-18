@@ -155,7 +155,7 @@ lob_trap_hist
 ```
 
 
-```{r, include=FALSE}
+```{r, echo = FALSE}
 # These graphs look at the mean number of traps at sites over time
 
 lob_trap_year <- group_by(lob_trap_filtered, "YEAR") 
@@ -585,8 +585,8 @@ legal_lob = tidy_lob_ab %>%
   filter(YEAR == 2017) %>% 
   mutate(
     legal = case_when(
-      SIZE > 82.6 ~ "Above Limit",
-      SIZE <= 82.6 ~ "Below Limit")) %>% 
+      SIZE > 82.6 ~ "AboveLimit",
+      SIZE <= 82.6 ~ "BelowLimit")) %>% 
   count(SITE, legal) %>% 
   spread(legal, n) %>% 
   select(-SITE)
@@ -648,15 +648,21 @@ legal_prot_x2
 #P value is 0.97, so there is definitely not a significant difference between protected and unprotected sites. This is pretty obvious from the quick and dirty propotion table I made. 
 ```
 
-Working on a finalized table. It's a work in progress
-```{r}
-#lob_prop_final = tidy_lob_ab %>% 
-  #group_by(SITE) %>% 
-  #summarize(
-    #limit = n(SIZE)) 
-  #"below legal" = tally(legal == "Below Limit"))
+FINALIZED TABLE 
 
-lob_chi_tab = kable(legal_lob, "latex", booktabs = T)
-lob_chi_tab
+```{r}
+lob_prop_final = as.data.frame(legal_lob) %>%
+  mutate(Site = c("Arroyo Quemado", "Carpineria", "Isla Vista", "Mohawk", "Naples"),
+         AboveLimit_percentage = round(AboveLimit/(AboveLimit+BelowLimit), 2),
+         BelowLimit_percentage = round(BelowLimit/(AboveLimit+BelowLimit), 2),
+         Legal = paste(as.character(AboveLimit),"(", as.character(AboveLimit_percentage),")"),
+         Not_legal = paste(as.character(BelowLimit),"(", as.character(BelowLimit_percentage),")")) %>% 
+  select(Site, Legal, Not_legal) %>% 
+  kable(col.name = c("Site", "Above Limit", "Below Limit")) %>% 
+  kable_styling()
+
+lob_prop_final
+
+
 ```
 
