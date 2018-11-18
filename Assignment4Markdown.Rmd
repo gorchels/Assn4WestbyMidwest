@@ -579,7 +579,7 @@ At Isla Vista, there was a significant difference in lobster carapace size (t(`r
 
 4. Doing a chi squared analysis on the size of lobsters based off site in 2017
 
-```{r}
+```{r, Include = FALSE}
 #Making a table that is chi-squared friendly 
 
 legal_lob = tidy_lob_ab %>% 
@@ -610,7 +610,9 @@ legal_x2
 
 
 ```
-```{r}
+
+
+```{r, Include = FALSE}
 #I'm doing a chisquared test comparing protected and non protected sites. 
 
 legal_lob_prot = tidy_lob_ab %>% 
@@ -647,23 +649,26 @@ legal_prot_x2 = chisq.test(legal_lob_prot)
 legal_prot_x2
 
 #P value is 0.97, so there is definitely not a significant difference between protected and unprotected sites. This is pretty obvious from the quick and dirty propotion table I made. 
+
+
+
+
 ```
 
-FINALIZED TABLE 
 
 ```{r}
 lob_prop_final = as.data.frame(legal_lob) %>%
-  mutate(Site = c("Arroyo Quemado", "Carpineria", "Isla Vista", "Mohawk", "Naples"),
+  rbind(., c(386, 1282)) %>% 
+  mutate(Site = c("Arroyo Quemado", "Carpineria", "Isla Vista", "Mohawk", "Naples", "Total"),
          AboveLimit_percentage = round(AboveLimit/(AboveLimit+BelowLimit), 2),
          BelowLimit_percentage = round(BelowLimit/(AboveLimit+BelowLimit), 2),
-         Legal = paste(as.character(AboveLimit),"(", as.character(AboveLimit_percentage),")"),
-         Not_legal = paste(as.character(BelowLimit),"(", as.character(BelowLimit_percentage),")")) %>% 
-  select(Site, Legal, Not_legal) %>% 
-  kable(col.name = c("Site", "Above Limit", "Below Limit")) %>% 
+         Legal = paste(as.character(AboveLimit),"(",as.character(AboveLimit_percentage),")"),
+         Not_legal = paste(as.character(BelowLimit),"(",as.character(BelowLimit_percentage),")"),
+         Total = AboveLimit+BelowLimit) %>% 
+  select(Site, Legal, Not_legal, Total) %>% 
+  kable(col.name = c("Site", "Above Limit", "Below Limit", "Total")) %>% 
   kable_styling()
-d
+
 lob_prop_final
-
-
 ```
 
