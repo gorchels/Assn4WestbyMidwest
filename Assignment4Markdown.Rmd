@@ -73,7 +73,7 @@ aque_lob_ab_hist <- ggplot(data = aque_ab_summary,
                                y = mean_size_aque)) +
   geom_col()
 
-aque_lob_ab_hist
+#aque_lob_ab_hist
 
 
 # Plotting changes in time for CARP
@@ -87,7 +87,7 @@ CARP_lob_ab_hist <- ggplot(data = CARP_ab_summary,
                                y = mean_size_CARP)) +
   geom_col()
 
-CARP_lob_ab_hist
+#CARP_lob_ab_hist
 
 
 # Plotting changes in time for IVEE
@@ -101,7 +101,7 @@ IVEE_lob_ab_hist <- ggplot(data = IVEE_ab_summary,
                                y = mean_size_IVEE)) +
   geom_col()
 
-IVEE_lob_ab_hist
+#IVEE_lob_ab_hist
 
 
 # Plotting changes in time for MOHK
@@ -115,7 +115,7 @@ MOHK_lob_ab_hist <- ggplot(data = MOHK_ab_summary,
                                y = mean_size_MOHK)) +
   geom_col()
 
-MOHK_lob_ab_hist
+#MOHK_lob_ab_hist
 
 
 
@@ -130,7 +130,7 @@ NAPL_lob_ab_hist <- ggplot(data = NAPL_ab_summary,
                                y = mean_size_NAPL)) +
   geom_col()
 
-NAPL_lob_ab_hist
+#NAPL_lob_ab_hist
 ```
 
 
@@ -146,7 +146,7 @@ lob_trap_hist <- ggplot(lob_trap_filtered, aes(TRAPS)) +
   geom_histogram(aes(fill = SITE)) +
   facet_wrap(~SITE, scales = "free")
 
-lob_trap_hist
+#lob_trap_hist
 
 ```
 
@@ -167,7 +167,7 @@ aque_lob_trap_hist <- ggplot(data = aque_trap_summary,
                                y = mean_trap_aque)) +
   geom_col()
 
-aque_lob_trap_hist
+#aque_lob_trap_hist
 
 
 
@@ -182,7 +182,7 @@ CARP_lob_trap_hist <- ggplot(data = CARP_trap_summary,
                                y = mean_trap_CARP)) +
   geom_col()
 
-CARP_lob_trap_hist
+#CARP_lob_trap_hist
 
 
 
@@ -197,7 +197,7 @@ IVEE_lob_trap_hist <- ggplot(data = IVEE_trap_summary,
                                y = mean_trap_IVEE)) +
   geom_col()
 
-IVEE_lob_trap_hist
+#IVEE_lob_trap_hist
 
 
 
@@ -212,7 +212,7 @@ MOHK_lob_trap_hist <- ggplot(data = MOHK_trap_summary,
                                y = mean_trap_MOHK)) +
   geom_col()
 
-MOHK_lob_trap_hist
+#MOHK_lob_trap_hist
 
 
 
@@ -228,7 +228,7 @@ NAPL_lob_trap_hist <- ggplot(data = NAPL_trap_summary,
                                y = mean_trap_NAPL)) +
   geom_col()
 
-NAPL_lob_trap_hist
+#NAPL_lob_trap_hist
 ```
 
 ```{r}
@@ -243,7 +243,7 @@ aque_lob_trap_total_hist <- ggplot(data = aque_trap_total,
                                y = TRAPS)) +
   geom_col()
 
-aque_lob_trap_total_hist
+#aque_lob_trap_total_hist
 
 
 
@@ -256,7 +256,7 @@ CARP_lob_trap_total_hist <- ggplot(data = CARP_trap_total,
                                y = TRAPS)) +
   geom_col()
 
-CARP_lob_trap_total_hist
+#CARP_lob_trap_total_hist
 
 
 
@@ -269,7 +269,7 @@ IVEE_lob_trap_total_hist <- ggplot(data = IVEE_trap_total,
                                y = TRAPS)) +
   geom_col()
 
-IVEE_lob_trap_total_hist
+#IVEE_lob_trap_total_hist
 
 
 
@@ -282,7 +282,7 @@ MOHK_lob_trap_total_hist <- ggplot(data = MOHK_trap_total,
                                y = TRAPS)) +
   geom_col()
 
-MOHK_lob_trap_total_hist
+#MOHK_lob_trap_total_hist
 
 
 
@@ -296,7 +296,7 @@ NAPL_lob_trap_total_hist <- ggplot(data = NAPL_trap_total,
                                y = TRAPS)) +
   geom_col()
 
-NAPL_lob_trap_total_hist
+#NAPL_lob_trap_total_hist
 ```
 
 ```{r}
@@ -321,7 +321,7 @@ count_vs_traps <- ggplot(data = ab_traps_merge,
   geom_point(aes(colour = SITE)) +
   facet_wrap(~YEAR)
 
-count_vs_traps
+#count_vs_traps
 
 ```
 
@@ -347,7 +347,7 @@ trap_count_scatter <- ggplot(data = merged_yearly_trap,
   geom_point(aes(colour = YEAR)) +
   facet_wrap(~SITE)
 
-trap_count_scatter
+#trap_count_scatter
 
 
 ```
@@ -358,11 +358,30 @@ merge_bubble <- ggplot(merged_yearly_trap, aes(x = YEAR, y = total_lob)) +
   geom_point(aes(color = SITE, size = trap_yearly),
              alpha = 0.3) +
   theme_classic() +
-  scale_color_manual(values = c("blue","green","red","orange","black")) + #name = "Smoker\nStatus") +
-  labs(x = "Year", y = "Total Lobsters") 
-  #scale_size_continuous(name = "Mother\nWeight Gain")
+  scale_color_manual(values = c("blue","green","purple","orange","black"),
+  name = "Location") +
+  labs(x = "Year", y = "Lobsters Count") +
+ # ggtitle("Lobster Abundence and Fishing Pressure from 2012-2017") +
+  scale_size_continuous(name = "Average Number \n of Traps (Yearly)") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,800))
 
 merge_bubble
+```
+
+```{r}
+merge_bubble2 <- ggplot(merged_yearly_trap, aes(x = YEAR, y = total_lob)) +
+  geom_point(aes(color = SITE, size = trap_yearly),
+             alpha = 0.3) +
+  theme_classic() +
+  scale_color_manual(values = c("blue","green","red","orange","black"),
+  name = "Location") +
+  labs(x = "Year", y = "Total Lobsters") +
+  #ggtitle("Lobster Abundence and Fishing Pressure from 2012-2017") +
+  scale_size_continuous(name = "Average Number \n of Traps (Yearly)") +
+  facet_wrap(~SITE) +
+  scale_y_continuous(expand = c(0,0)) 
+
+merge_bubble2
 ```
 
 
