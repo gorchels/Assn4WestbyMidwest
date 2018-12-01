@@ -2,7 +2,9 @@
 title: "Assignment4"
 author: "Madeline Gorchels"
 date: "11/10/2018"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -19,6 +21,8 @@ library(kableExtra)
 library(vcdExtra) # Based on instructions it looks like this may be necissary -you'll need to instal this if you haven't already
 library(car)
 library(RColorBrewer)
+library(ggplot2)
+library(ggsignif)
 
 lob_ab = read_csv("lobster_size_abundance.csv")
 lob_trap = read_csv("lobster_traps.csv")
@@ -33,7 +37,7 @@ order of SITE. Note: you are not expected to use regression here - just think of
 describe annual totals visually and in text, noting important trends, events and differences.
 
 
-```{r}
+```{r, include = FALSE}
 
 tidy_lob_ab <- expand.dft(data.frame(lob_ab), freq = "COUNT") %>% 
   mutate(
@@ -56,7 +60,7 @@ lob_ab_hist_stack <- ggplot(tidy_lob_ab, aes(SIZE)) +
 lob_ab_hist_stack
 ```
 
-```{r}
+```{r, include=FALSE}
 
 # These graphs are plotting size of lobsters at each site based on year
 
@@ -136,7 +140,7 @@ NAPL_lob_ab_hist <- ggplot(data = NAPL_ab_summary,
 
 
 
-```{r}
+```{r, include=FALSE}
 # Trap data has other sites, this code is to look at only the sites in the other table
 
 lob_trap_filtered <- filter(lob_trap, SITE == c("AQUE","CARP","IVEE","MOHK","NAPL"))  # I get a warning message so I need to confirm this is ok
@@ -151,7 +155,7 @@ lob_trap_hist <- ggplot(lob_trap_filtered, aes(TRAPS)) +
 ```
 
 
-```{r}
+```{r, echo = FALSE}
 # These graphs look at the mean number of traps at sites over time
 
 lob_trap_year <- group_by(lob_trap_filtered, "YEAR") 
@@ -231,7 +235,7 @@ NAPL_lob_trap_hist <- ggplot(data = NAPL_trap_summary,
 #NAPL_lob_trap_hist
 ```
 
-```{r}
+```{r, include = FALSE}
 # These graphs look at total traps at each location over time
 
 # Plotting changes in time for AQUE
@@ -395,7 +399,7 @@ lob_size_2017 <- select(tidy_lob_ab, YEAR, SITE, SIZE) %>%  # Select relevant ca
 
 #Exploritory graphs to test normality of data
 lob_2017_hist <- ggplot(lob_size_2017, aes(x = SIZE)) +
-  geom_histogram(aes(fill = SITE)) +
+  geom_histogram(aes(fill = SITE), bins = 10) +
   facet_wrap(~ SITE)
 
 lob_2017_hist
@@ -422,20 +426,22 @@ var
 
 lob_2017_aov <- aov(SIZE ~ SITE, data = lob_size_2017)
 summary(lob_2017_aov)
+
 #reject null at least two sites significantly different lobster sizes
 
 # Post-hoc testing with Tukey's HSD
 lob_2017_ph <- TukeyHSD(lob_2017_aov)
 lob_2017_ph
 
-#2017 sites signficantly different from one anothe NAPL to CARP, NAPL to IVEE, and NAPL to MOHK
+#2017 sites signficantly different from one anothe NAPL to CARP and NAPL to IVEE
 
 #Creating basic graph
 lob_2017_summary <- lob_size_2017 %>% 
   group_by(SITE) %>% 
   summarize(
     mean_size = mean(SIZE),
-    sd_size = sd(SIZE))
+    sd_size = sd(SIZE),
+    sample_size = length(SITE))
   
   
 lob_2017_col <- ggplot(lob_2017_summary, aes(x = SITE, y = mean_size)) +
@@ -447,7 +453,24 @@ lob_2017_col <- ggplot(lob_2017_summary, aes(x = SITE, y = mean_size)) +
 lob_2017_col
 ```
 
-# Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
+```{r}
+#boxplot 2017 ANOVA data
+lob_2017_box <- ggplot(lob_size_2017, aes(x = SITE, y = SIZE)) +
+  geom_boxplot() +
+  theme_classic() +
+  ylab("Lobster Carapace length (mm)") +
+  xlab("Site") +
+  geom_signif(comparisons = list(c("CARP", "NAPL")), 
+              map_signif_level=TRUE, y_position = c(167), annotation = c("p = 0.02")) +
+  geom_signif(comparisons = list(c("IVEE", "NAPL")), 
+              map_signif_level = TRUE, y_position = c(157), annotation = c("p = 0.003"))
+
+lob_2017_box 
+
+```
+Lobster Carapace length (mm) differed significantly among the five (LTER) sites in the Santa Barbara Channel (F() = )
+
+3. Changes in lobster size at MPA and non-MPA sites in 2012 and 2017
 
 ```{r}
 #Creating data frame spliting up protected and unprotected with 2012 and 2017
@@ -499,21 +522,91 @@ lob_ttest_nonprot
 
 #Protected area size is significantly different between years, smaller in 2017
 
-```
+#RIGHT TESTS: ttest per site
 
+lob_size_2012_2017 = tidy_lob_ab %>% 
+  filter(YEAR == "2012" | YEAR == "2017")
+
+#ttest IVEE between 2012 to 2017
+IVEE_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "IVEE") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+IVEE_ttest
+#significantly different between 2012 and 2017, larger in 2017
+#effect size:
+I_2012 <- lob_size_2012_2017 %>% 
+  filter(SITE == "IVEE" | YEAR == "2012") %>% 
+  pull(SIZE)
+I_2017 <-  lob_size_2012_2017 %>% 
+  filter(SITE == "IVEE" | YEAR == "2017") %>% 
+  pull(SIZE)
+effect_IVEE <- cohen.d(I_2012,I_2017)
+effect_IVEE
+
+#ttest NAPL between 2012 to 2017
+NAPL_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "NAPL") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+NAPL_ttest
+#not significantly different, 2017 still larger though
+
+#ttest AQUE between 2012 to 2017
+AQUE_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "AQUE") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+AQUE_ttest
+#not significantly different
+
+#ttest MOHK between 2012 to 2017
+MOHK_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "MOHK") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+MOHK_ttest
+#significantly different, 2012 larger
+M_2012 <- lob_size_2012_2017 %>% 
+  filter(SITE == "MOHK" | YEAR == "2012") %>% 
+  pull(SIZE)
+M_2017 <-  lob_size_2012_2017 %>% 
+  filter(SITE == "MOHK" | YEAR == "2017") %>% 
+  pull(SIZE)
+effect_MOHK <- cohen.d(M_2012,M_2017)
+effect_MOHK
+
+#ttest CARP between 2012 to 2017
+CARP_ttest <- lob_size_2012_2017 %>% 
+  filter(SITE == "CARP") %>% 
+  t.test(SIZE ~ YEAR, data = .)
+CARP_ttest
+#not significantly different
+
+#2012 summary table
+lob_2012_summary <- select(tidy_lob_ab, YEAR, SITE, SIZE) %>%  
+  filter(YEAR == "2012") %>% 
+  group_by(SITE) %>% 
+  summarize(
+    mean_size = mean(SIZE),
+    sd_size = sd(SIZE),
+    sample_size = length(SITE))
+
+```
+At Isla Vista, there was a significant difference in lobster carapace size (t(`r {round(IVEE_ttest$parameter,1)}`) = `r {round(IVEE_ttest$statistic,2)}`, *p* = `r {round(IVEE_ttest$p.value,4)}`) between 2012 (66.07 ± 12.09 mm, n = 26) and 2017 (71.45 ± 14.32 mm, n = 606). At Naples Reef, there was no significant difference in lobster carapace size (t(`r {round(NAPL_ttest$parameter,1)}`) = `r {round(NAPL_ttest$statistic,2)}`, *p* = `r {round(NAPL_ttest$p.value,4)}`) between 2012 (73.00 ± 11.74 mm, n = 6) and 2017 (76.23 ± 11.38 mm, n = 112). At Arroyo Quemado, there was no significant difference in lobster carapace size (t(`r {round(AQUE_ttest$parameter,1)}`) = `r {round(AQUE_ttest$statistic,2)}`, *p* = `r {round(AQUE_ttest$p.value,4)}`) between 2012 (71.00 ± 10.15 mm, n = 38) and 2017 (73.98 ± 11.89 mm, n = 67). At Mohawk Reef, there was a significant difference in lobster carapace size (t(`r {round(MOHK_ttest$parameter,1)}`) = `r {round(MOHK_ttest$statistic,2)}`, *p* = `r {round(MOHK_ttest$p.value,4)}`) between 2012 (77.25 ± 10.58 mm, n = 83) and 2017 (72.00 ± 9.28 mm, n = 178). At Carpinteria, there was no significant difference in lobster carapace size (t(`r {round(CARP_ttest$parameter,1)}`) = `r {round(CARP_ttest$statistic,2)}`, *p* = `r {round(CARP_ttest$p.value,4)}`) between 2012 (74.35 ± 14.61 mm, n = 78) and 2017 (72.22 ± 13.21 mm, n = 705).
+
+```{r}
+#table of t-test results
+```
 
 
 4. Doing a chi squared analysis on the size of lobsters based off site in 2017
 
-```{r}
+```{r, Include = FALSE}
 #Making a table that is chi-squared friendly 
 
 legal_lob = tidy_lob_ab %>% 
   filter(YEAR == 2017) %>% 
   mutate(
     legal = case_when(
-      SIZE > 82.6 ~ "Above Limit",
-      SIZE <= 82.6 ~ "Below Limit")) %>% 
+      SIZE > 82.6 ~ "AboveLimit",
+      SIZE <= 82.6 ~ "BelowLimit")) %>% 
   count(SITE, legal) %>% 
   spread(legal, n) %>% 
   select(-SITE)
@@ -536,7 +629,9 @@ legal_x2
 
 
 ```
-```{r}
+
+
+```{r, Include = FALSE}
 #I'm doing a chisquared test comparing protected and non protected sites. 
 
 legal_lob_prot = tidy_lob_ab %>% 
@@ -573,16 +668,26 @@ legal_prot_x2 = chisq.test(legal_lob_prot)
 legal_prot_x2
 
 #P value is 0.97, so there is definitely not a significant difference between protected and unprotected sites. This is pretty obvious from the quick and dirty propotion table I made. 
+
+
+
+
 ```
 
-Working on a finalized table. It's a work in progress
+
 ```{r}
-#lob_prop_final = tidy_lob_ab %>% 
-  #group_by(SITE) %>% 
-  #summarize(
-    #limit = tally(legal == "Above Limit"), 
-  #"below legal" = tally(legal == "Below Limit"))
+lob_prop_final = as.data.frame(legal_lob) %>%
+  rbind(., c(386, 1282)) %>% 
+  mutate(Site = c("Arroyo Quemado", "Carpineria", "Isla Vista", "Mohawk", "Naples", "Total"),
+         AboveLimit_percentage = round(AboveLimit/(AboveLimit+BelowLimit), 2),
+         BelowLimit_percentage = round(BelowLimit/(AboveLimit+BelowLimit), 2),
+         Legal = paste(as.character(AboveLimit),"(",as.character(AboveLimit_percentage),")"),
+         Not_legal = paste(as.character(BelowLimit),"(",as.character(BelowLimit_percentage),")"),
+         Total = AboveLimit+BelowLimit) %>% 
+  select(Site, Legal, Not_legal, Total) %>% 
+  kable(col.name = c("Site", "Above Limit", "Below Limit", "Total")) %>% 
+  kable_styling()
 
-#lob_prop_final
+lob_prop_final
 ```
-
+aaa
